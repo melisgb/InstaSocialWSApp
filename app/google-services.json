@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "341506154274",
+    "firebase_url": "https://instasocialwsapp.firebaseio.com",
+    "project_id": "instasocialwsapp",
+    "storage_bucket": "instasocialwsapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:341506154274:android:a3bc9d46748ff6a3728f7b",
+        "android_client_info": {
+          "package_name": "com.example.instasocialwsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "341506154274-p83256ngmj343q3on019hohqff1irj63.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.instasocialwsapp",
+            "certificate_hash": "7be2235588220e07052c75ff940c9414c5e219fd"
+          }
+        },
+        {
+          "client_id": "341506154274-ajagfilbseh79capoen6jus7ra2bpoco.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM_6ykQ8iB2N_dC36sa5bSC2cORfo4h3k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "341506154274-ajagfilbseh79capoen6jus7ra2bpoco.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
