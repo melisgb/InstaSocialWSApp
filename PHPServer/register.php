@@ -10,10 +10,10 @@ $query = "insert into instasocial.user(user_name, user_email, user_password, use
 $result = mysqli_query($connect, $query);
 
 if(!$result){
-	$output = "{ 'msg': 'Fail' }";
+	$output = "{ 'msg': 'Register Failed' }";
 }
 else {
-	$output = "{ 'msg': 'User is added'}";
+	$output = "{ 'msg': 'Register User is added'}";
 }
 
 // print("{'ok': '$query'}");

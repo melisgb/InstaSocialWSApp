@@ -100,7 +100,15 @@ class RegisterActivity : AppCompatActivity() {
                 //to save in localDatabase
                 val url = "http://10.0.2.2:8000/register.php?user_name=${etUsername.text}&user_email=${etEmail.text}&user_password=${etPassword.text}&user_profile_url=$downloadUrl"
 //                val url = "http://10.0.2.2:8000/register.php?user_name=Elena&user_email=isabel&user_password=12345&user_profile_url=https://firebasestorage.googleapis.com/v0/b/instasocialwsapp.appspot.com/o/profileImgs%2Fisab230620_103650.jpg?alt=media&token=c8856b9e-d0c3-49d8-81a4-6d4901f8d798"
-                MyAsyncTask().execute(url)
+                MyAsyncTask(
+                    onFail = {
+                        btnRegister.isEnabled = true
+                    },
+                    onSuccess = {
+                        Toast.makeText(this, "User added", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                ).execute(url)
                 loadMainActivity()
 
             }

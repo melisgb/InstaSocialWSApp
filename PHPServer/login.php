@@ -22,10 +22,10 @@ while( $row = mysqli_fetch_assoc($result)){
 }
 
 if($userInfo){
-	print("{ 'msg' : 'success login', 'info': '". json_encode($userInfo)."' }");
+	print("{ 'msg' : 'Login Successful', 'info': '". json_encode($userInfo)."' }");
 
 } else {
-	print("{ 'msg' : 'cannot login' }");
+	print("{ 'msg' : 'Login Failed' }");
 }
 
 mysqli_free_result($result);

@@ -7,6 +7,7 @@ import android.util.AndroidException
 import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_register.*
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
@@ -18,7 +19,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 //To use as HTTP Request
-class MyAsyncTask : AsyncTask<String, String, String>() {
+class MyAsyncTask(val onSuccess: () -> Unit, val onFail: () -> Unit) : AsyncTask<String, String, String>() {
 
     override fun onPreExecute() {
         //before task started
@@ -29,7 +30,7 @@ class MyAsyncTask : AsyncTask<String, String, String>() {
         try {
             val url = URL(p0[0])
             val urlConnect = url.openConnection() as HttpURLConnection
-            urlConnect.connectTimeout = 7000
+            urlConnect.connectTimeout = 5000
             var inString = convertStreamToString(urlConnect.inputStream)
             //this function will publish the progress to the UI
             publishProgress(inString)
@@ -43,11 +44,20 @@ class MyAsyncTask : AsyncTask<String, String, String>() {
         try {
             var json = JSONObject(values[0])
             val msg = json.getString("msg")
-            if(msg== "User is added"){
-                Log.d("UserInfo", msg)
-//                Toast.makeText(context, "User added", Toast.LENGTH_SHORT).show()
-                //TODO: finish  Activity().finish()     btnRegister.enable = true
-                
+            if(msg== "Register User is added"){
+                Log.d("UserRegistration", msg)
+                onSuccess() //In RegisterActivity, will finish()
+            }
+            else if(msg== "Login Successful"){
+                val msgInfo = JSONArray(json.getString("info"))
+                val userInfo = msgInfo.getJSONObject(0)
+                val username = userInfo.getString("user_name")
+                Log.d("UserLogin", username)
+                onSuccess() //For LoginActivity
+            }
+            else {
+                Log.d("Failed", msg)
+                onFail() //In RegisterActivity, will enable the button
             }
 
         } catch (ex: Exception) {
