@@ -1,14 +1,17 @@
 package com.example.instasocialwsapp
 
+import android.app.Activity
 import android.content.Context
 import android.os.AsyncTask
 import android.util.AndroidException
 import android.util.Log
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_register.*
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.lang.Compiler.enable
 import java.net.HttpURLConnection
 import java.net.URL
 import java.time.LocalDateTime
@@ -40,10 +43,11 @@ class MyAsyncTask : AsyncTask<String, String, String>() {
         try {
             var json = JSONObject(values[0])
             val msg = json.getString("msg")
-            if(msg== "user is added"){
+            if(msg== "User is added"){
                 Log.d("UserInfo", msg)
 //                Toast.makeText(context, "User added", Toast.LENGTH_SHORT).show()
-                //TODO: finish
+                //TODO: finish  Activity().finish()     btnRegister.enable = true
+                
             }
 
         } catch (ex: Exception) {

@@ -37,6 +37,7 @@ class RegisterActivity : AppCompatActivity() {
         signInAnonymously()
         btnRegister.setOnClickListener {
             saveImageInFirebase()
+            btnRegister.isEnabled = false
         }
 
         ivUserImage.setOnClickListener {
@@ -52,9 +53,12 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-
+    open fun enable(){
+        println("hello")
+    }
 
     fun saveImageInFirebase(){
+        //It will save the image in Firebase/Storage
         val currUser = mAuth!!.currentUser
 //        val email =  currUser!!.email.toString()
         val email = etEmail.text.toString()
@@ -89,7 +93,7 @@ class RegisterActivity : AppCompatActivity() {
                 val downloadUrl = uri.toString()
                 Log.d("DOWNLOAD URL: ", downloadUrl)
 
-                //save into FirebaseDB. It will save the username as index and the userID as value.
+                //save into FirebaseDB. It will save the username as index and the userID as node.
                 myRef.child("users").child(currUser!!.uid).child("email").setValue(email)
                 myRef.child("users").child(currUser!!.uid).child("profileImg").setValue(downloadUrl)
 
