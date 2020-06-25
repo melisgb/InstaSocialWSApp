@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import kotlinx.android.synthetic.main.add_post.view.*
+import java.net.URLEncoder
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
@@ -25,11 +27,7 @@ class MainActivity : AppCompatActivity() {
         listViewPost.adapter = postsAdapter
 
         postsList.clear()
-        //Dummy data
-        postsList.add(Post("1", "him", "url", "2019-12-03", "add" ))
-        postsList.add(Post("120", "Hola primer post", "url", "2019/06/24", "minus"))
-        postsList.add(Post("123", "Hola 2do post, Demo for sure", "https://firebasestorage.googleapis.com/v0/b/instasocialwsapp.appspot.com/o/profileImgs%2F1234240620_044051.jpg?alt=media&token=9bb20e82-68ce-4649-8f76-a9e111fe3ba2", "2019/06/24", "minus"))
-        postsAdapter!!.notifyDataSetChanged()
+        loadPosts("%", 0)
 
     }
 
@@ -48,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Toast.makeText(applicationContext, query, Toast.LENGTH_SHORT).show()
-                loadPosts("%$query%")
+                loadPosts("%$query%", 0)
                 return false
             }
 
@@ -62,16 +60,51 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if(item!=null){
             when(item.itemId){
-                R.id.add_note_ic -> {
-                    //TODO: Go to home
+                R.id.goToHome -> {
+                    //TODO: call operator 3 query
+                    loadPosts("%", 0)
                 }
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    fun loadPosts(title : String){
+
+    fun loadPosts(keyword : String, startFrom : Int){
         //TODO: Search into DB based on title, updateList, notifyadapter
+        val content = URLEncoder.encode(keyword, "utf-8")
+        val url = "http://10.0.2.2:8000/get_posts.php?case=3&keyword=${content}&startFrom=${startFrom}"
+
+        MyAsyncTask(
+            onFail = {
+                Toast.makeText(applicationContext, "Retrieving posts failed", Toast.LENGTH_SHORT).show()
+                postsList.clear()
+                postsList.add(
+                    Post(
+                        "1",
+                        "",
+                        "url",
+                        "2019-12-03",
+                        "add",
+                        "profImg" ))
+
+                postsAdapter!!.notifyDataSetChanged()
+            },
+            onSuccess = { listOfPosts ->
+                Toast.makeText(applicationContext, "Loading posts", Toast.LENGTH_SHORT).show()
+                postsList.clear()
+                postsList.add(
+                    Post(
+                        "1",
+                        "",
+                        "url",
+                        "2019-12-03",
+                        "add",
+                        "profImg" ))
+                postsList.addAll(listOfPosts as ArrayList<Post>)
+                postsAdapter!!.notifyDataSetChanged()
+            }
+        ).execute(url)
     }
     fun getPosts(){
         //TODO: Read from DB and load into the list

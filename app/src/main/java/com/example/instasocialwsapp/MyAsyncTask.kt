@@ -52,11 +52,31 @@ class MyAsyncTask(val onSuccess: (Any?) -> Unit, val onFail: () -> Unit) : Async
             }
             else if(msg== "Post saved") {
                 Log.d("PostSaved", msg)
-                onSuccess(null) //For MainActivity
+                onSuccess(null) //For PostAdapter - Saving post
+            }
+            else if(msg == "Loading posts successful"){
+                Log.d("PostSaved", msg)
+                val listOfPosts = ArrayList<Post>()
+                val msgInfo = JSONArray(json.getString("postsInfo"))
+                for(i in 0 until msgInfo.length()) {
+                    val postInfo = msgInfo.getJSONObject(i)
+                    listOfPosts.add(
+                        Post(
+                            postInfo.getString("post_id"),
+                            postInfo.getString("post_content"),
+                            postInfo.getString("post_image_url"),
+                            postInfo.getString("post_date"),
+                            postInfo.getString("user_name"),
+                            postInfo.getString("user_profile_url") ))
+                    //Is it necessary to add an ADD element?
+                }
+
+                onSuccess(listOfPosts) //For MainActivity - Retrieving posts
+                //TODO: Send the postsList
             }
             else {
                 Log.d("Failed", msg)
-                onFail() //In RegisterActivity, will enable the button
+                onFail()
             }
 
         } catch (ex: Exception) {

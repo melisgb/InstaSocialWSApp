@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
@@ -29,7 +30,7 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         var currentPost = postsList[position]
-        if (currentPost.postPersonUID.equals("add")) {
+        if (currentPost.postPersonName.equals("add")) {
             //load the layout to Create a Post in Firebase
             val myView = layoutInflater.inflate(R.layout.add_post, null)
             myView.postAttachmentImgView.setOnClickListener {
@@ -37,10 +38,15 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
                 myView.postAttachmentImgView.isEnabled = false
             }
             myView.postSendImgView.setOnClickListener {
-                val content = URLEncoder.encode(myView.postContentEText.text.toString(), "utf-8")
-                val downloadUrlEscape = URLEncoder.encode(downloadUrl, "utf-8")
                 //savePost into DB
-                val url = "http://10.0.2.2:8000/add_post.php?post_user_id=${SavedSettings.userID}&post_content=${content}&post_image_url=${downloadUrlEscape}"
+                val url = Uri.parse("http://10.0.2.2:8000/add_post.php?")
+                    .buildUpon()
+                    .appendQueryParameter("post_user_id", SavedSettings.userID)
+                    .appendQueryParameter("post_content", myView.postContentEText.text.toString())
+                    .appendQueryParameter("post_image_url", downloadUrl)
+                    .build()
+                    .toString()
+
                 MyAsyncTask(
                     onFail = {
                         Toast.makeText(context, "Post failed", Toast.LENGTH_SHORT).show()
@@ -48,13 +54,23 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
                     onSuccess = {
                         Toast.makeText(context, "Post successful", Toast.LENGTH_SHORT).show()
                         myView.postContentEText.setText("")
+                        //TODO: Receive the new post info and add it to the list.
+                        postsList.add(
+                            Post(
+                                "120",
+                                "Empty",
+                                "url",
+                                "date",
+                                "loading",
+                                "profileurl" ))  //to show LOADING layout
+                        notifyDataSetChanged()
                     }
                 ).execute(url)
 
             }
             return myView
         }
-        else if (currentPost.postPersonUID.equals("loading")){
+        else if (currentPost.postPersonName.equals("loading")){
             val myView = layoutInflater.inflate(R.layout.loading_image_post, null)
             return myView
 
@@ -65,19 +81,12 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
 
             myView.dateTxtView.text = currentPost.dateCreated.toString()
             myView.contentTxtView.text = currentPost.postContent.toString()
+            myView.userNameTxtView.text = currentPost.postPersonName.toString()
             Picasso.get()
                 .load(currentPost.postImageUrl.toString())
                 .resize(100, 100)
                 .centerCrop()
                 .into(myView.contentImgView)
-
-//                TODO: Show username and image
-//                Picasso.get()
-//                    .load(userinfo)
-//                    .resize(100, 100)
-//                    .centerCrop()
-//                    .into(myView.contentImgView)
-
             return myView
         }
     }
@@ -104,7 +113,11 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
         if(requestCode == PICK_IMG_CODE && data != null && resultCode == AppCompatActivity.RESULT_OK){
             val selectedImage = data.data
             val pathImageCol = arrayOf(MediaStore.Images.Media.DATA)
-            val cursor = context.contentResolver.query(selectedImage!!, pathImageCol, null, null )
+            val cursor = context.contentResolver.query(
+                selectedImage!!,
+                pathImageCol,
+                null,
+                null )
             cursor!!.moveToFirst()
 
             val colIndex = cursor.getColumnIndex(pathImageCol[0])
@@ -117,7 +130,14 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
     }
 
     fun uploadImage(bitmap: Bitmap){
-        postsList.add(0, Post("120", "Empty", "url", "date", "loading"))  //to show LOADING layout
+        postsList.add(0,
+            Post(
+                "120",
+                "Empty",
+                "url",
+                "date",
+                "loading",
+                "profileurl" ))  //to show LOADING layout
         notifyDataSetChanged()
 
         val storage = FirebaseStorage.getInstance()
@@ -129,7 +149,7 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
         val imageRef = storageRef.child("postImages/"+ imageFilename)
 
         val byteArray = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArray)   //this is to reduce the file size from the phone's image  Range from 0-100
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArray) //this is to reduce the file size from the phone's image  Range from 0-100
         val data = byteArray.toByteArray()
 
         val uploadTask = imageRef.putBytes(data)  //Uploading image into Firebase using the imageRef.

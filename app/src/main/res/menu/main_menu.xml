@@ -6,10 +6,12 @@
         android:id="@+id/search_note_ic"
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
+        android:iconTint="@color/colorWhite"
+        android:icon="@drawable/ic_search_menu"
         app:showAsAction="always" />
     <item
-        android:id="@+id/add_note_ic"
-        android:icon="@drawable/ic_person"
-        android:title="Add"
+        android:id="@+id/goToHome"
+        android:icon="@drawable/ic_home"
+        android:title="Home"
         app:showAsAction="ifRoom" />
 </menu>
