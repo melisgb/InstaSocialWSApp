@@ -3,23 +3,17 @@ package com.example.instasocialwsapp
 import android.app.Activity
 import android.content.Context
 import android.os.AsyncTask
-import android.util.AndroidException
 import android.util.Log
-import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_register.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.lang.Compiler.enable
 import java.net.HttpURLConnection
 import java.net.URL
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 //To use as HTTP Request
-class MyAsyncTask(val onSuccess: () -> Unit, val onFail: () -> Unit) : AsyncTask<String, String, String>() {
+class MyAsyncTask(val onSuccess: (Any?) -> Unit, val onFail: () -> Unit) : AsyncTask<String, String, String>() {
 
     override fun onPreExecute() {
         //before task started
@@ -46,14 +40,19 @@ class MyAsyncTask(val onSuccess: () -> Unit, val onFail: () -> Unit) : AsyncTask
             val msg = json.getString("msg")
             if(msg== "Register User is added"){
                 Log.d("UserRegistration", msg)
-                onSuccess() //In RegisterActivity, will finish()
+                onSuccess(null) //In RegisterActivity, will finish()
             }
             else if(msg== "Login Successful"){
                 val msgInfo = JSONArray(json.getString("info"))
                 val userInfo = msgInfo.getJSONObject(0)
+                val user_id = userInfo.getString("user_id")
                 val username = userInfo.getString("user_name")
                 Log.d("UserLogin", username)
-                onSuccess() //For LoginActivity
+                onSuccess(user_id) //For LoginActivity
+            }
+            else if(msg== "Post saved") {
+                Log.d("PostSaved", msg)
+                onSuccess(null) //For MainActivity
             }
             else {
                 Log.d("Failed", msg)

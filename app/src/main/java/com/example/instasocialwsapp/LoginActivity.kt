@@ -34,8 +34,13 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()
                 btnLogin.isEnabled = true
             },
-            onSuccess = {
+            onSuccess = { result ->
+                //TODO: Return from MyAsync the user_id
+                val user_id = result as String
+                val savedSettings = SavedSettings(applicationContext)
+                savedSettings.saveUserSettings(user_id)
                 Toast.makeText(this, "User logged", Toast.LENGTH_SHORT).show()
+                finish()
             }
         ).execute(url)
 

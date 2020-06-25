@@ -4,4 +4,7 @@
     <string name="enter_email">Enter email</string>
     <string name="enter_password">Enter password</string>
     <string name="register">Register</string>
+
+    <!--Add post layout-->
+    <string name="write_a_post">Write a post</string>
 </resources>
