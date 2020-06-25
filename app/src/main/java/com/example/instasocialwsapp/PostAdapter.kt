@@ -37,9 +37,6 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
                 myView.postAttachmentImgView.isEnabled = false
             }
             myView.postSendImgView.setOnClickListener {
-                postsList.add(0, Post("1", "him", "url", "2019-12-03", "loading" ))
-                notifyDataSetChanged()
-
                 val content = URLEncoder.encode(myView.postContentEText.text.toString(), "utf-8")
                 val downloadUrlEscape = URLEncoder.encode(downloadUrl, "utf-8")
                 //savePost into DB
@@ -50,6 +47,7 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
                     },
                     onSuccess = {
                         Toast.makeText(context, "Post successful", Toast.LENGTH_SHORT).show()
+                        myView.postContentEText.setText("")
                     }
                 ).execute(url)
 
