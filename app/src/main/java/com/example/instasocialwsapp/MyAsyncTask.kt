@@ -52,7 +52,17 @@ class MyAsyncTask(val onSuccess: (Any?) -> Unit, val onFail: () -> Unit) : Async
             }
             else if(msg== "Post saved") {
                 Log.d("PostSaved", msg)
-                onSuccess(null) //For PostAdapter - Saving post
+
+                val postInfo = JSONArray(json.getString("postInfo")).getJSONObject(0)
+                val newPost = Post(
+                    postInfo.getString("post_id"),
+                    postInfo.getString("post_content"),
+                    postInfo.getString("post_image_url"),
+                    postInfo.getString("post_date"),
+                    postInfo.getString("user_name"),
+                    postInfo.getString("user_profile_url") )
+
+                onSuccess(newPost) //For PostAdapter - Saving post
             }
             else if(msg == "Loading posts successful"){
                 Log.d("PostSaved", msg)

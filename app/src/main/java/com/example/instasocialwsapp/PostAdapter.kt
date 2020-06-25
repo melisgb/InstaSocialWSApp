@@ -37,6 +37,7 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
                 loadImage()
                 myView.postAttachmentImgView.isEnabled = false
             }
+
             myView.postSendImgView.setOnClickListener {
                 //savePost into DB
                 val url = Uri.parse("http://10.0.2.2:8000/add_post.php?")
@@ -51,18 +52,12 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
                     onFail = {
                         Toast.makeText(context, "Post failed", Toast.LENGTH_SHORT).show()
                     },
-                    onSuccess = {
+                    onSuccess = {newPost ->
                         Toast.makeText(context, "Post successful", Toast.LENGTH_SHORT).show()
                         myView.postContentEText.setText("")
                         //TODO: Receive the new post info and add it to the list.
-                        postsList.add(
-                            Post(
-                                "120",
-                                "Empty",
-                                "url",
-                                "date",
-                                "loading",
-                                "profileurl" ))  //to show LOADING layout
+
+                        postsList.add(newPost as Post)
                         notifyDataSetChanged()
                     }
                 ).execute(url)
