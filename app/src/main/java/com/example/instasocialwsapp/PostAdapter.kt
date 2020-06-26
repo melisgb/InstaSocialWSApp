@@ -74,9 +74,14 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
             //load the layout to show each post element previously saved into Firebase
             val myView = layoutInflater.inflate(R.layout.post_element, null)
 
+            myView.userNameTxtView.text = currentPost.postPersonName.toString()
             myView.dateTxtView.text = currentPost.dateCreated.toString()
             myView.contentTxtView.text = currentPost.postContent.toString()
-            myView.userNameTxtView.text = currentPost.postPersonName.toString()
+
+            myView.userNameTxtView.setOnClickListener {
+                loadPostsFromParticularUser(currentPost.postUserId.toString())
+            }
+
             Picasso.get()
                 .load(currentPost.postImageUrl.toString())
                 .resize(100, 100)
@@ -127,10 +132,11 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
     fun uploadImage(bitmap: Bitmap){
         postsList.add(0,
             Post(
-                "120",
+                "2",
                 "Empty",
                 "url",
                 "date",
+                "1",
                 "loading",
                 "profileurl" ))  //to show LOADING layout
         notifyDataSetChanged()
@@ -163,5 +169,52 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
                 notifyDataSetChanged()
                 Log.d("DOWNLOAD URL: ", downloadUrl)
             }
+    }
+
+
+    fun loadPostsFromParticularUser(userID: String){
+        val url = Uri.parse("http://10.0.2.2:8000/get_posts.php?")
+            .buildUpon()
+            .appendQueryParameter("case", "2")
+            .appendQueryParameter("user_id", userID)
+            .appendQueryParameter("startFrom", "0")
+            .build()
+            .toString()
+
+        MyAsyncTask(
+            onFail = {
+                Toast.makeText(context, "Retrieving posts failed", Toast.LENGTH_SHORT).show()
+                postsList.clear()
+                postsList.add(
+                    Post(
+                        "1",
+                        "",
+                        "url",
+                        "2019-12-03",
+                        "1",
+                        "add",
+                        "profImg" ))
+
+                notifyDataSetChanged()
+            },
+            onSuccess = { listOfPosts ->
+                Toast.makeText(context, "Loading posts", Toast.LENGTH_SHORT).show()
+                postsList.clear()
+                postsList.add(
+                    Post(
+                        "1",
+                        "",
+                        "url",
+                        "2019-12-03",
+                        "1",
+                        "add",
+                        "profImg" ))
+                postsList.addAll(listOfPosts as ArrayList<Post>)
+                notifyDataSetChanged()
+            }
+        ).execute(url)
+
+
+
     }
 }

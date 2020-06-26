@@ -59,6 +59,7 @@ class MyAsyncTask(val onSuccess: (Any?) -> Unit, val onFail: () -> Unit) : Async
                     postInfo.getString("post_content"),
                     postInfo.getString("post_image_url"),
                     postInfo.getString("post_date"),
+                    postInfo.getString("post_user_id"),
                     postInfo.getString("user_name"),
                     postInfo.getString("user_profile_url") )
 
@@ -76,6 +77,7 @@ class MyAsyncTask(val onSuccess: (Any?) -> Unit, val onFail: () -> Unit) : Async
                             postInfo.getString("post_content"),
                             postInfo.getString("post_image_url"),
                             postInfo.getString("post_date"),
+                            postInfo.getString("post_user_id"),
                             postInfo.getString("user_name"),
                             postInfo.getString("user_profile_url") ))
                     //Is it necessary to add an ADD element?

@@ -85,6 +85,7 @@ class MainActivity : AppCompatActivity() {
                         "",
                         "url",
                         "2019-12-03",
+                        "1",
                         "add",
                         "profImg" ))
 
@@ -99,6 +100,7 @@ class MainActivity : AppCompatActivity() {
                         "",
                         "url",
                         "2019-12-03",
+                        "1",
                         "add",
                         "profImg" ))
                 postsList.addAll(listOfPosts as ArrayList<Post>)

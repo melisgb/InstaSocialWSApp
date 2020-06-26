@@ -57,7 +57,9 @@
                     android:layout_weight="0.8"
                     android:textSize="14dp"
                     android:text="UserDemo"
-                    android:textColor="@android:color/black" />
+                    android:clickable="true"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/dateTxtView"
