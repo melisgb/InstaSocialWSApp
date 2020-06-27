@@ -2,7 +2,7 @@
 
 $host = "127.0.0.1";
 $user = "root";
-$password = "admin007";
+$password = "";
 $database = "instasocial";
 
 $connect = mysqli_connect($host, $user, $password, $database);
