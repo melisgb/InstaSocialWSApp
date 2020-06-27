@@ -28,7 +28,6 @@ class LoginActivity : AppCompatActivity() {
     fun loginUser(){
         //to save in localDatabase
         val url = "http://10.0.2.2:8000/login.php?user_email=${etEmailLogin.text}&user_password=${etPasswordLogin.text}"
-        //http://10.0.2.2:8000/login.php?user_email=${etEmail.text}&user_password=${etPassword.text}
         MyAsyncTask(
             onFail = {
                 Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show()

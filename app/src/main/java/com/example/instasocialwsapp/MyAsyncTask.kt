@@ -66,7 +66,7 @@ class MyAsyncTask(val onSuccess: (Any?) -> Unit, val onFail: () -> Unit) : Async
                 onSuccess(newPost) //For PostAdapter - Saving post
             }
             else if(msg == "Loading posts successful"){
-                Log.d("PostSaved", msg)
+                Log.d("Loading posts successful", msg)
                 val listOfPosts = ArrayList<Post>()
                 val msgInfo = JSONArray(json.getString("postsInfo"))
                 for(i in 0 until msgInfo.length()) {
@@ -84,7 +84,32 @@ class MyAsyncTask(val onSuccess: (Any?) -> Unit, val onFail: () -> Unit) : Async
                 }
 
                 onSuccess(listOfPosts) //For MainActivity - Retrieving posts
-                //TODO: Send the postsList
+            }
+            else if(msg == "Loading users successful"){
+                Log.d("Loading users successful", msg)
+                val listOfUsers = ArrayList<User>()
+                val msgInfo = JSONArray(json.getString("usersInfo"))
+                for(i in 0 until msgInfo.length()) {
+                    val usersInfo = msgInfo.getJSONObject(i)
+                    listOfUsers.add(
+                        User(
+                            usersInfo.getString("user_id"),
+                            usersInfo.getString("user_name"),
+                            usersInfo.getString("user_profile_url"),
+                            usersInfo.getString("is_followed") == "1"
+                        ))
+                }
+                onSuccess(listOfUsers) //For UsersActivity - Retrieving users
+            }
+            else if(msg == "Follower deleted"){
+                Log.d("Follower deleted", msg)
+                //TODO: define the behaviour
+                onSuccess(null) //For UsersAdapter
+            }
+            else if(msg == "Follower added"){
+                Log.d("Follower added", msg)
+                //TODO: define the behaviour
+                onSuccess(null) //For UsersAdapter
             }
             else {
                 Log.d("Failed", msg)

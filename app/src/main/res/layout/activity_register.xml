@@ -45,7 +45,7 @@
         android:layout_height="40pt"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
-        android:background="@color/colorOptional" />
+        android:background="@color/colorAccent" />
 
     <Button
         android:id="@+id/btnRegister"

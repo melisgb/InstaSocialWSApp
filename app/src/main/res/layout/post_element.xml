@@ -99,6 +99,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_weight="0"
+                    android:tint="@color/colorPink"
                     app:srcCompat="@drawable/ic_love_post" />
             </LinearLayout>
 

@@ -57,7 +57,7 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
                         myView.postContentEText.setText("")
                         //TODO: Receive the new post info and add it to the list.
 
-                        postsList.add(newPost as Post)
+                        postsList.add(1, newPost as Post)
                         notifyDataSetChanged()
                     }
                 ).execute(url)
@@ -183,7 +183,7 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
 
         MyAsyncTask(
             onFail = {
-                Toast.makeText(context, "Retrieving posts failed", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Retrieving posts failed", Toast.LENGTH_SHORT).show()
                 postsList.clear()
                 postsList.add(
                     Post(
@@ -198,7 +198,7 @@ class PostAdapter(val context: Activity, val postsList: ArrayList<Post>) : BaseA
                 notifyDataSetChanged()
             },
             onSuccess = { listOfPosts ->
-                Toast.makeText(context, "Loading posts", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "Loading posts", Toast.LENGTH_SHORT).show()
                 postsList.clear()
                 postsList.add(
                     Post(

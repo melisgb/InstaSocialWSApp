@@ -7,4 +7,6 @@
 
     <!--Add post layout-->
     <string name="write_a_post">Write a post</string>
+    <string name="user_demo">UserDemo</string>
+    <string name="image">Image</string>
 </resources>

@@ -15,6 +15,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/bckgrnd"
+        android:backgroundTint="@color/colorAccent"
         android:orientation="vertical"
         android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,6 +38,7 @@
                 android:layout_height="match_parent"
                 android:ems="10"
                 android:textColor="@color/colorBlack"
+                android:textCursorDrawable="@drawable/color_cursor"
                 android:hint="@string/write_a_post"
                 android:inputType="textMultiLine" />
         </LinearLayout>

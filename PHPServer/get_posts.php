@@ -34,10 +34,17 @@ elseif($_GET['case'] == 2){
 			 ";";
 }
 elseif($_GET['case'] == 3){
-	//http://localhost:8000/get_posts.php?case=3&keyword=ia&startFrom=0
-	$query = "select * from instasocial.user_posts where post_content like '%".
-			 $_GET['keyword'].
-			 "%' limit 20 offset ".
+	//http://localhost:8000/get_posts.php?case=3&keyword=ia&user_id=60&startFrom=0
+	$query = "select * 
+	            from instasocial.user_posts 
+			   where (post_user_id in (
+					select user_id 
+		  			  from instasocial.follower 
+		  			 where following_user_id = ".$_GET['user_id']. " )
+		  		or post_user_id = ". $_GET['user_id']. 
+		  		") and post_content like '%". $_GET['keyword'].
+		  	"' order by post_date desc".
+			" limit 20 offset ".
 			 $_GET['startFrom'].
 			 ";";
 }

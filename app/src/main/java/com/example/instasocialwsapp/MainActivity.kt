@@ -7,13 +7,15 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.*
-import kotlinx.android.synthetic.main.add_post.view.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_main.*
 import java.net.URLEncoder
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
-    open var postsList = ArrayList<Post>()
+    var postsList = ArrayList<Post>()
     var postsAdapter : PostAdapter? = null
+    var userID : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         val savedSettings = SavedSettings(this)
         savedSettings.loadUserSettings()
+        userID = savedSettings.sharedRef!!.getString("userID", "0").toString()
 
         postsAdapter = PostAdapter(this, postsList)
         val listViewPost = findViewById<ListView>(R.id.postsListView)
@@ -28,6 +31,14 @@ class MainActivity : AppCompatActivity() {
 
         postsList.clear()
         loadPosts("%", 0)
+
+        val factButtonGoToUsers  = findViewById<FloatingActionButton>(R.id.gotoUsersFloatingActBtn)
+        factButtonGoToUsers.setOnClickListener {
+            val intent = Intent(this, UsersActivity::class.java)
+            intent.putExtra("userID", userID)
+            startActivity(intent)
+        }
+
 
     }
 
@@ -58,12 +69,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item!=null){
-            when(item.itemId){
-                R.id.goToHome -> {
-                    //TODO: call operator 3 query
-                    loadPosts("%", 0)
-                }
+        when(item.itemId){
+            R.id.goToHome -> {
+                loadPosts("%", 0)
             }
         }
         return super.onOptionsItemSelected(item)
@@ -71,13 +79,12 @@ class MainActivity : AppCompatActivity() {
 
 
     fun loadPosts(keyword : String, startFrom : Int){
-        //TODO: Search into DB based on title, updateList, notifyadapter
+        //Search into DB based on keyword and updates the List
         val content = URLEncoder.encode(keyword, "utf-8")
-        val url = "http://10.0.2.2:8000/get_posts.php?case=3&keyword=${content}&startFrom=${startFrom}"
-
+        val url = "http://10.0.2.2:8000/get_posts.php?case=3&keyword=${content}&user_id=${userID}&startFrom=${startFrom}"
         MyAsyncTask(
             onFail = {
-                Toast.makeText(applicationContext, "Retrieving posts failed", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(applicationContext, "Retrieving posts failed", Toast.LENGTH_SHORT).show()
                 postsList.clear()
                 postsList.add(
                     Post(
@@ -92,7 +99,7 @@ class MainActivity : AppCompatActivity() {
                 postsAdapter!!.notifyDataSetChanged()
             },
             onSuccess = { listOfPosts ->
-                Toast.makeText(applicationContext, "Loading posts", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(applicationContext, "Loading posts", Toast.LENGTH_SHORT).show()
                 postsList.clear()
                 postsList.add(
                     Post(
@@ -107,9 +114,6 @@ class MainActivity : AppCompatActivity() {
                 postsAdapter!!.notifyDataSetChanged()
             }
         ).execute(url)
-    }
-    fun getPosts(){
-        //TODO: Read from DB and load into the list
     }
 
 }
